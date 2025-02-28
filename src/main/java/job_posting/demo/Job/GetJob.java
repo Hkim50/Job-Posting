@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class getJob {
+public class GetJob {
 
     @JsonProperty("GetJobInfo")
     private JobInfo jobinfo;

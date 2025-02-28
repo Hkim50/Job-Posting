@@ -1,13 +1,10 @@
 package job_posting.demo.Job.impl;
 
-import job_posting.demo.Job.JobInfo;
 import job_posting.demo.Job.JobService;
-import job_posting.demo.Job.Laptop;
-import job_posting.demo.Job.getJob;
+import job_posting.demo.Job.GetJob;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -22,17 +19,43 @@ public class JobServiceImpl implements JobService {
     private String KEY;
 
     @Override
-    public getJob findBySchool(String school) {
+    public GetJob findBySchoolAndType(String school, String type) {
         int listTotalCount = this.webClient.get()
-                .uri(KEY + "/json/GetJobInfo/1/1/" + school)
+                .uri(KEY + "/json/GetJobInfo/1/1/" + school+"/"+type)
                 .retrieve()
-                .bodyToMono(getJob.class).block().getJobinfo().getListTotalCount();
+                .bodyToMono(GetJob.class).block().getJobinfo().getListTotalCount();
 
 
         return this.webClient.get()
-                .uri(KEY + "/json/GetJobInfo/1/" + listTotalCount + "/" + school)
+                .uri(KEY + "/json/GetJobInfo/1/" + listTotalCount + "/" + school + "/" + type)
                 .retrieve()
-                .bodyToMono(getJob.class).block();
+                .bodyToMono(GetJob.class).block();
     }
+
+    @Override
+    public Mono<GetJob> findByLocation(String school, String type, String location) {
+
+        return this.webClient.get()
+                .uri(KEY + "/json/GetJobInfo/1/1000/{school}/{type}/{location}", school , type, location)
+                .retrieve()
+                .bodyToMono(GetJob.class);
+    }
+
+    @Override
+    public Mono<GetJob> findByExperience(String school, String type, String exp) {
+        return this.webClient.get()
+                .uri(KEY + "/json/GetJobInfo/1/1000/{school}/{type}/ /{exp}", school, type, exp)
+                .retrieve()
+                .bodyToMono(GetJob.class);
+    }
+
+    @Override
+    public Mono<GetJob> findByLocationAndExperience(String school, String type, String location, String exp) {
+        return this.webClient.get()
+                .uri(KEY + "/json/GetJobInfo/1/1000/{school}/{type}/{location}/{exp}", school, type, location, exp)
+                .retrieve()
+                .bodyToMono(GetJob.class);
+    }
+
 
 }

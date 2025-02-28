@@ -1,8 +1,11 @@
 package job_posting.demo.Job;
 
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 public interface JobService {
-    getJob findBySchool(String school);
+    GetJob findBySchoolAndType(String school, String type);
+
+    Mono<GetJob> findByLocation(String school, String type, String location);
+    Mono<GetJob> findByExperience(String school, String type, String exp);
+    Mono<GetJob> findByLocationAndExperience(String school, String type, String location, String exp);
 }
